@@ -1,0 +1,5 @@
+*.pyc
+*.svg
+*.hpgl
+env
+.idea
