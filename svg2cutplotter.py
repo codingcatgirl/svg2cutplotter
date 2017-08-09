@@ -134,7 +134,7 @@ for element in tree.findall('.//svg:path', namespaces):
 paths = MultiLineString(paths)
 paths = scale(paths, scaling, scaling, origin=(0, 0))
 if args.mirror:
-    paths.scale(paths, 0, 1)
+    paths = scale(paths, 1, -1)
 
 
 
