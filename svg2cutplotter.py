@@ -1,6 +1,7 @@
 import argparse
 import os
 import re
+from operator import itemgetter
 
 import defusedxml.ElementTree as ET
 from shapely.affinity import translate, scale
@@ -131,6 +132,7 @@ def parse_svg_data(data):
 paths = []
 for element in tree.findall('.//svg:path', namespaces):
     paths.extend(parse_svg_data(element.attrib['d']))
+paths, maxx = zip(*sorted(((path, LineString(path).bounds[2]) for path in paths), key=itemgetter(1)))
 paths = MultiLineString(paths)
 paths = scale(paths, scaling, scaling, origin=(0, 0))
 if args.mirror:
