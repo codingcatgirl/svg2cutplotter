@@ -68,13 +68,16 @@ def parse_svg_data(data):
             if not len(numbers) or len(numbers) % 2:
                 raise ValueError('Invalid number of arguments for moveto command!')
             numbers = iter(numbers)
+            first = True
             for x, y in zip(numbers, numbers):
                 if relative:
                     x, y = last_point[0]+x, last_point[1]+y
-                if current_subpath:
-                    done_subpaths.append(current_subpath)
-                    last_end_point = current_subpath[-1]
-                    current_subpath = []
+                if first:
+                    first = False
+                    if current_subpath:
+                        done_subpaths.append(current_subpath)
+                        last_end_point = current_subpath[-1]
+                        current_subpath = []
                 current_subpath.append((x, y))
                 last_point = (x, y)
 
