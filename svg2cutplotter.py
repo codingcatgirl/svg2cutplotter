@@ -29,14 +29,6 @@ args = parser.parse_args()
 tree = ET.parse(args.filename[0])
 root = tree.getroot()
 
-viewbox = root.attrib['viewBox'].split(' ')
-width = float(re.match('^[0-9]+(\.[0-9]+)?mm', root.attrib['width']).group(0)[:-2])
-height = float(re.match('^[0-9]+(\.[0-9]+)?mm', root.attrib['height']).group(0)[:-2])
-if width > height:
-    scaling = width / float(viewbox[2])
-else:
-    scaling = height / float(viewbox[3])
-
 namespaces = {'svg': 'http://www.w3.org/2000/svg'}
 
 def parse_svg_data(data):
@@ -141,6 +133,7 @@ for element in tree.findall('.//svg:path', namespaces):
     paths.extend(parse_svg_data(element.attrib['d']))
 paths, maxx = zip(*sorted(((path, LineString(path).bounds[2]) for path in paths), key=itemgetter(1)))
 paths = MultiLineString(paths)
+scaling = 2.54/96
 paths = scale(paths, scaling, scaling, origin=(0, 0))
 if args.mirror:
     paths = scale(paths, 1, -1)
