@@ -133,7 +133,7 @@ for element in tree.findall('.//svg:path', namespaces):
     paths.extend(parse_svg_data(element.attrib['d']))
 paths, maxx = zip(*sorted(((path, LineString(path).bounds[2]) for path in paths), key=itemgetter(1)))
 paths = MultiLineString(paths)
-scaling = 2.54/96
+scaling = 25.4/96
 paths = scale(paths, scaling, scaling, origin=(0, 0))
 if args.mirror:
     paths = scale(paths, 1, -1)
