@@ -129,6 +129,10 @@ def parse_svg_data(data):
         done_subpaths.append(current_subpath)
     return done_subpaths
 
+for element in tree.findall('.//svg:clipPath/..', namespaces):
+    for clippath in element.findall('./svg:clipPath', namespaces):
+        element.remove(clippath)
+
 paths = []
 for element in tree.findall('.//svg:path', namespaces):
     paths.extend(parse_svg_data(element.attrib['d']))
