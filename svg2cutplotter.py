@@ -57,7 +57,7 @@ def parse_svg_data(data):
 
         numbers = []
         while True:
-            match = re.match('^-?[0-9]+(\.[0-9]+)?', data)
+            match = re.match('^-?[0-9]+(\.[0-9]+)?(e\-?[0-9]+)?', data)
             if match is None:
                 break
             numbers.append(float(match.group(0)))
