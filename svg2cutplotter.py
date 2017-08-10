@@ -155,12 +155,14 @@ def apply_overcut(geometry, overcut):
         path_coords = list(path.coords)
 
         segment = LineString(path_coords[:2])
-        factor = (segment.length+overcut)/segment.length
-        path_coords[0] = scale(segment, xfact=factor, yfact=factor, origin=path_coords[1]).coords[0]
+        if segment.length:
+            factor = (segment.length+overcut)/segment.length
+            path_coords[0] = scale(segment, xfact=factor, yfact=factor, origin=path_coords[1]).coords[0]
 
         segment = LineString(path_coords[-2:])
-        factor = (segment.length + overcut) / segment.length
-        path_coords[-1] = scale(segment, xfact=factor, yfact=factor, origin=path_coords[-2]).coords[-1]
+        if segment.length:
+            factor = (segment.length + overcut) / segment.length
+            path_coords[-1] = scale(segment, xfact=factor, yfact=factor, origin=path_coords[-2]).coords[-1]
 
         coords.append(path_coords)
 
@@ -288,7 +290,8 @@ while True:
             print('Language not set.')
         else:
             plot_paths = paths
-            plot_paths = apply_overcut(plot_paths, overcut=overcut)
+            if overcut:
+                plot_paths = apply_overcut(plot_paths, overcut=overcut)
             plot_paths = translate(plot_paths, xoff=0-bounds[0], yoff=0-bounds[1])
             plot_paths = scale(translate(plot_paths, xoff=offsetx, yoff=offsety), scaling, scaling, origin=(0, 0))
             open(device, 'w').write(plot_data(plot_paths, dpml=(language == 'dpml'),
