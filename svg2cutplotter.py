@@ -5,7 +5,8 @@ from operator import itemgetter
 
 import defusedxml.ElementTree as ET
 from shapely.affinity import translate, scale
-from shapely.geometry import MultiLineString, LineString, box
+from shapely.geometry import MultiLineString, LineString, Point
+
 
 def check_float(value):
     value = float(value)
@@ -153,16 +154,15 @@ def apply_overcut(geometry, overcut):
     coords = []
     for path in paths:
         path_coords = list(path.coords)
-
-        segment = LineString(path_coords[:2])
-        if segment.length:
-            factor = (segment.length+overcut)/segment.length
-            path_coords[0] = scale(segment, xfact=factor, yfact=factor, origin=path_coords[1]).coords[0]
-
-        segment = LineString(path_coords[-2:])
-        if segment.length:
-            factor = (segment.length + overcut) / segment.length
-            path_coords[-1] = scale(segment, xfact=factor, yfact=factor, origin=path_coords[-2]).coords[-1]
+        for p in path.coords:
+            distance = path.project(Point(p))
+            if distance == overcut:
+                path_coords.append(p)
+                break
+            elif distance > overcut:
+                path_coords.append(path.interpolate(overcut).coords[0])
+                break
+            path_coords.append(p)
 
         coords.append(path_coords)
 
