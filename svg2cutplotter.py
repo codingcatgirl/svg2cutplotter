@@ -246,7 +246,7 @@ while True:
         print('overcut   set overcut')
         print('device    set device')
         print('language  set language')
-        print('bounds    show bouds on plotter')
+        print('bounds    show bounds on plotter')
         print('plot      plot')
 
     elif command in ('show', 's'):
