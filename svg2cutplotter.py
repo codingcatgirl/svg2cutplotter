@@ -26,7 +26,7 @@ parser.add_argument('--nomirror', dest='mirror', action='store_const', const=Fal
                     help='do not mirror the y axis')
 args = parser.parse_args()
 
-tree = ET.parse('svgplot.svg')
+tree = ET.parse(args.filename[0])
 root = tree.getroot()
 
 viewbox = root.attrib['viewBox'].split(' ')
